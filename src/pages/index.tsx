@@ -17,7 +17,7 @@ const HomePage = () => {
         </div>
 
         <div className="w-1/2 flex flex-col text-white border-2 border-white m-10 rounded-lg pt-2">
-          <h3 className="text-center m-2 font-bold">What's going on?</h3>
+          <h3 className="text-center m-2 font-bold">What&apos;s going on?</h3>
           <div className="bg-white text-black px-4 py-2 mb-2 w-full hover:bg-gray-200">
             <h4 className="font-bold text-blue-500">Latest Project</h4>
             <div>

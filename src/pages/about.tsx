@@ -25,15 +25,15 @@ const AboutPage = () => {
 
         <div className="w-2/3">
           <div className="flex justify-evenly">
-            <button>Profile</button>
-            <button>Educations</button>
-            <button>Experiences</button>
-            <button>Achievements</button>
-            <button>Tech Stacks</button>
+            <button type="button">Profile</button>
+            <button type="button">Educations</button>
+            <button type="button">Experiences</button>
+            <button type="button">Achievements</button>
+            <button type="button">Tech Stacks</button>
           </div>
 
           <div>
-
+            
           </div>
         </div>
       </div>
