@@ -10,9 +10,6 @@ interface Props {
 const Layout = ({ children, ...props }: Props) => {
   return (
     <>
-      <Head>
-        <script data-cfasync="false" src="//db033pq6bj64g.cloudfront.net/?bqpbd=977886" async />
-      </Head>
       <div className="min-h-screen flex flex-col body-bg">
         <Navbar />
         { children }
