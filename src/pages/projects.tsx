@@ -5,7 +5,7 @@ import SkeletonBG from "../../public/skeleton-bg.png"
 
 const ProjectsPage = () => {
   return (
-    <div>
+    <>
       <Head>
         <title>Elysium Realm | Projects</title>
         <meta name="description" content="A compilation of Project built by Elysium Realm" />
@@ -45,7 +45,7 @@ const ProjectsPage = () => {
           <Image alt="" src={SkeletonBG} width={600} height={1200} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
