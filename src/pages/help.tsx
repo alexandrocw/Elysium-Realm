@@ -50,13 +50,13 @@ const HelpPage = () => {
                   Elysium Realm may collect and store personal information from users, such as name and email address for registration purposes. This information will be kept confidential and not shared with third parties, except as required by law.
                 </li>
                 <li>
-                  Cookies and similar technologies may be used to gather anonymous usage data, such as the pages users visit and the duration of their visit with prior notice. If there is no notice that means it have not been implemented. This data will be used to improve the website's performance and user experience.
+                  Cookies and similar technologies may be used to gather anonymous usage data, such as the pages users visit and the duration of their visit with prior notice. If there is no notice that means it have not been implemented. This data will be used to improve the website&apos;s performance and user experience.
                 </li>
                 <li>
                   Third-party services may be used to serve ads on the website, and these services may use cookies to track user behavior and provide relevant advertisements. Users may opt-out of personalized ads by adjusting their ad settings or by installing an ad-blocking extension.
                 </li>
                 <li>
-                  Elysium Realm will take reasonable measures to protect the security of users' personal information and will promptly notify users in the event of a data breach.
+                  Elysium Realm will take reasonable measures to protect the security of users&apos; personal information and will promptly notify users in the event of a data breach.
                 </li>
               </ol>
             </div>
