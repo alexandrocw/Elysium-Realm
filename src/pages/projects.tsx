@@ -2,6 +2,8 @@ import ProjectCard from "components/ProjectCard";
 import Head from "next/head";
 import Image from "next/image";
 import SkeletonBG from "../../public/skeleton-bg.png"
+import { projects } from "data/projects";
+import { ProjectPost } from "types/types";
 
 const ProjectsPage = () => {
   return (
@@ -25,16 +27,9 @@ const ProjectsPage = () => {
 
       <div className="m-10 flex space-x-2">
         <div className="bg-white rounded-md shadow-md flex flex-wrap">
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
-
+          {projects.map((project: ProjectPost) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
         </div>
       </div>
     </>

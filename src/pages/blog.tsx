@@ -1,5 +1,7 @@
 import BlogCard from "components/BlogCard";
 import Head from "next/head";
+import { posts } from "data/posts";
+import { BlogPost } from "types/types";
 
 const BlogPage = () => {
   return (
@@ -13,16 +15,9 @@ const BlogPage = () => {
 
       <div className="m-10 flex space-x-2">
         <div className="bg-white rounded-md shadow-md flex flex-wrap">
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
-
+          {posts.map((post: BlogPost) => (
+            <BlogCard key={post.id} post={post} />
+          ))}
         </div>
       </div>
     </>

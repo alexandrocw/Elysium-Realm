@@ -1,10 +1,6 @@
 import Head from "next/head";
 import { MouseEvent, useState } from "react";
-
-interface FormData {
-  subject: string;
-  message: string;
-}
+import { FormData } from "types/types";
 
 const HelpPage = () => {
   const [current, setCurrent] = useState("help-privacy");
