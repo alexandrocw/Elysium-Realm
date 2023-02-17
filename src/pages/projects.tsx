@@ -24,7 +24,7 @@ const ProjectsPage = () => {
       </div>
 
       <div className="m-10 flex space-x-2">
-        <div className="w-2/3 bg-white rounded-md shadow-md flex flex-wrap">
+        <div className="bg-white rounded-md shadow-md flex flex-wrap">
           <ProjectCard />
           <ProjectCard />
           <ProjectCard />
@@ -35,14 +35,6 @@ const ProjectsPage = () => {
           <ProjectCard />
           <ProjectCard />
 
-        </div>
-
-        <div className="bg-white h-full w-1/3 rounded-md border-2 border-gray-200">
-          <div className="font-bold text-center text-black p-2">
-            <h3>Sponsored Content</h3>
-          </div>
-
-          <Image alt="" src={SkeletonBG} width={600} height={1200} />
         </div>
       </div>
     </>
