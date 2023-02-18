@@ -9,3 +9,35 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model BlogPost {
+  id String @default(cuid()) @id
+  title String
+  slug String @unique
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  author User? @relation(fields: [authorId], references: [id])
+  authorId String?
+  featuredImage String
+  excerpt String
+  content String
+  tags Tags[]
+  status Boolean @default(false)
+}
+
+model Tags {
+  id String @default(cuid()) @id
+  name String?
+  blogposts BlogPost[]
+
+}
+
+model User {
+  id String @default(cuid()) @id
+  name String?
+  email String? @unique
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  posts BlogPost[]
+  @@map(name: "users")
+}

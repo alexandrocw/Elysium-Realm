@@ -4,22 +4,31 @@ interface BlogPost {
   id: string;
   title: string;
   slug: string;
-  timeCreated: string;
-  timeUpdated: string;
-  author: string;
+  createdAt: Date;
+  updatedAt: Date;
+  author: {
+    name: string
+  };
+  authorId: string;
   featuredImage: string;
   excerpt: string;
   content: string;
-  tags: string[];
+  tags: {
+    name: string;
+  }[];
   status: string;
+}
+
+interface BlogPosts {
+  posts: BlogPost[];
 }
 
 interface ProjectPost {
   id: string;
   title: string;
   slug: string;
-  timeCreated: string;
-  timeUpdated: string;
+  createdAt: string;
+  updatedAt: string;
   author: string;
   featuredImage: string;
   excerpt: string;
@@ -47,11 +56,17 @@ interface LayoutProps {
   children?: ReactNode;
 }
 
+interface PostDetailsProps {
+  post: BlogPost;
+}
+
 export type {
   BlogCardProps,
   LayoutProps,
   FormData,
   BlogPost,
   ProjectCardProps,
-  ProjectPost
+  ProjectPost,
+  BlogPosts,
+  PostDetailsProps
 }
