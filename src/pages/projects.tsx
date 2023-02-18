@@ -26,11 +26,11 @@ const ProjectsPage = () => {
       </div>
 
       <div className="m-10 flex space-x-2">
-        <div className="bg-white rounded-md shadow-md flex flex-wrap">
-          {projects.map((project: ProjectPost) => (
+        {/* <div className="bg-white rounded-md shadow-md flex flex-wrap">
+          {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
-        </div>
+        </div> */}
       </div>
     </>
   );

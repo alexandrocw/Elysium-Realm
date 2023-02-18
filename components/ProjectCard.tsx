@@ -15,9 +15,9 @@ const ProjectCard = ({ project, key}: ProjectCardProps) => {
       <div className="flex flex-col">
         <p className="font-bold">{project.title}</p>
         <p>{project.excerpt}</p>
-        <p>By {project.author} On {project.timeCreated}</p>
+        <p>By {project.author} On {project.createdAt}</p>
         <p>Tag(s): {project.tags.join(" ")}</p>
-        <p>Latest Updated On {project.timeUpdated}</p>
+        <p>Latest Updated On {project.updatedAt}</p>
       </div>
     </div>
   );
