@@ -3,7 +3,7 @@ declare global {
     interface ProcessEnv {
       GITHUB_ID: string;
       GITHUB_SECRET: string;
-      SECRET: string;
+      NEXTAUTH_URL: string;
       NODE_ENV: 'development' | 'production';
       PORT?: string;
       PWD: string;
