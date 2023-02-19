@@ -27,14 +27,24 @@ interface ProjectPost {
   id: string;
   title: string;
   slug: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   author: string;
   featuredImage: string;
+  links: String[];
+  techs: {
+    name: string;
+  }[];
   excerpt: string;
   content: string;
-  tags: string[];
+  tags: {
+    name: string;
+  }[];
   status: string;
+}
+
+interface ProjectPosts {
+  projects: ProjectPost[];
 }
 
 interface BlogCardProps {
@@ -60,6 +70,10 @@ interface PostDetailsProps {
   post: BlogPost;
 }
 
+interface ProjectDetailsProps {
+  project: ProjectPost;
+}
+
 export type {
   BlogCardProps,
   LayoutProps,
@@ -67,6 +81,8 @@ export type {
   BlogPost,
   ProjectCardProps,
   ProjectPost,
+  ProjectPosts,
   BlogPosts,
-  PostDetailsProps
+  PostDetailsProps,
+  ProjectDetailsProps
 }

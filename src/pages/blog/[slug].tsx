@@ -56,7 +56,7 @@ const PostDetails = ({ post }: PostDetailsProps) => {
       <Head>
         <title>Elysium Realm | {post.title}</title>
         <meta name="description" content={post.content} />
-        <meta name="keywords" content={post.tags.map((tag) => (tag.name)).join(" ")} />
+        <meta name="keywords" content={post.tags.map((tag) => (tag.name)).join(", ")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 

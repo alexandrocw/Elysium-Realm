@@ -1,11 +1,34 @@
 import ProjectCard from "components/ProjectCard";
 import Head from "next/head";
 import Image from "next/image";
-import SkeletonBG from "../../public/skeleton-bg.png"
-import { projects } from "data/projects";
-import { ProjectPost } from "types/types";
+import SkeletonBG from "public/skeleton-bg.png"
+import { ProjectPost, ProjectPosts } from "types/types";
+import { GetStaticProps } from "next";
+import prisma from "lib/prisma";
 
-const ProjectsPage = () => {
+export const getStaticProps: GetStaticProps = async () => {
+  const projects = await prisma.projectPost.findMany({
+    orderBy: { updatedAt: "desc" },
+    include: {
+      tags: {
+        select: { name: true }
+      },
+      techs: {
+        select: { name: true }
+      },
+    }
+  })
+
+  const serializedProjects = JSON.parse(JSON.stringify(projects))
+
+  return {
+    props: { projects: serializedProjects },
+    revalidate: 10
+  }
+}
+
+const ProjectsPage = ({ projects }: ProjectPosts) => {
+
   return (
     <>
       <Head>
@@ -25,12 +48,12 @@ const ProjectsPage = () => {
         </div>
       </div>
 
-      <div className="m-10 flex space-x-2">
-        {/* <div className="bg-white rounded-md shadow-md flex flex-wrap">
-          {projects.map((project) => (
+      <div className="">
+        <div className="m-10 bg-white rounded-md shadow-md flex flex-col flex-wrap flex-grow">
+          {projects.map((project: ProjectPost) => (
             <ProjectCard key={project.id} project={project} />
           ))}
-        </div> */}
+        </div>
       </div>
     </>
   );
