@@ -7,7 +7,8 @@ interface BlogPost {
   createdAt: Date;
   updatedAt: Date;
   author: {
-    name: string
+    name: string;
+    email: string;
   };
   authorId: string;
   featuredImage: string;
@@ -50,6 +51,7 @@ interface ProjectPosts {
 interface BlogCardProps {
   post: BlogPost;
   key: string;
+  path: string;
 }
 
 interface ProjectCardProps {

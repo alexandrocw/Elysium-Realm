@@ -3,6 +3,8 @@ import Head from "next/head";
 import { BlogPost, BlogPosts } from "types/types";
 import prisma from "lib/prisma";
 import { GetStaticProps } from "next";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = await prisma.blogPost.findMany({
@@ -27,6 +29,8 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 const BlogPage = ({ posts }: BlogPosts) => {
+	const { data: session, status } = useSession();
+
   return (
     <>
       <Head>
@@ -36,10 +40,26 @@ const BlogPage = ({ posts }: BlogPosts) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <div>
-        <div className="m-10 bg-white rounded-md shadow-md flex flex-col flex-wrap flex-grow">
+      <div className="m-10 flex flex-col space-y-5">
+        {
+          !session ? 
+          <>
+          </> 
+          : (
+          <div className="flex flex-col space-y-2">
+            <Link className="bg-white p-5 rounded-lg hover:bg-gray-200 text-center text-3xl" href="/create">
+              Create a new post
+            </Link>
+            <Link className="bg-white p-5 rounded-lg hover:bg-gray-200 text-center text-3xl" href="/drafts">
+              Drafts
+            </Link>
+          </div>    
+          )
+        }
+
+        <div className="bg-white rounded-md shadow-md flex flex-col flex-wrap flex-grow">
           {posts.map((post: BlogPost) => (
-            <BlogCard key={post.id} post={post} />
+            <BlogCard key={post.id} post={post} path="blog" />
           ))}
         </div>
       </div>

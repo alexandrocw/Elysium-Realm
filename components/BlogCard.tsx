@@ -3,12 +3,12 @@ import SkeletonBG from "public/skeleton-bg.png";
 import { BlogCardProps } from "types/types";
 import Link from "next/link";
 
-const BlogCard = ({ post, key }: BlogCardProps) => {
+const BlogCard = ({ post, key, path }: BlogCardProps) => {
   post.createdAt = new Date(post.createdAt);
   post.updatedAt = new Date(post.updatedAt);
 
   return (
-    <Link href={`/blog/${post.slug}`}>
+    <Link href={`/${path}/${post.slug}`}>
       <div className="flex m-2 border-y-2 border-gray-200 space-x-2 hover:bg-gray-200" key={key}>
         {
           post.featuredImage ? (
