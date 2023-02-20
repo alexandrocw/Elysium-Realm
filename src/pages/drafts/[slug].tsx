@@ -23,7 +23,7 @@ export const getStaticPaths: GetStaticPaths<IParams> = async () => {
 
   return {
     paths,
-    fallback: false
+    fallback: true
   }
 }
 
@@ -39,6 +39,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
       tags: { select: { name: true }}
     }
   })
+  
+  if (!post) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
 
   const serializedPost = JSON.parse(JSON.stringify(post))
 
