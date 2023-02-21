@@ -1,45 +1,21 @@
 import prisma from "lib/prisma";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { ParsedUrlQuery } from "querystring";
-import { BlogPost, PostDetailsProps } from "types/types";
+import { PostDetailsProps } from "types/types";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
 
-interface IParams extends ParsedUrlQuery {
-  slug: string;
-}
-
-export const getStaticPaths: GetStaticPaths<IParams> = async () => {
-  const posts = await prisma.blogPost.findMany({
-    where: { status: false }
-  });
-
-  const paths = posts.map((post) => {
-    return {
-      params: { slug: post.slug }
-    }
-  })
-
-  return {
-    paths,
-    fallback: true
-  }
-}
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { slug } = context.params as IParams
-
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.blogPost.findUnique({
     where: {
-      slug: slug,
+      slug: String(params?.slug)
     },
-    include: {
+    include: { 
       author: { select: { name: true, email: true } },
-      tags: { select: { name: true }}
-    }
-  })
-  
+      tags: { select: { name: true } },
+    },
+  });
+
   if (!post) {
     return {
       redirect: {
@@ -49,11 +25,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }
 
-  const serializedPost = JSON.parse(JSON.stringify(post))
+  const serializedDrafts = JSON.parse(JSON.stringify(post));
 
   return {
     props: {
-      post: serializedPost
+      post: serializedDrafts
     }
   }
 }
@@ -77,14 +53,14 @@ const PostDetails = ({ post }: PostDetailsProps) => {
     await fetch(`/api/publish/${id}`, {
       method: 'PUT',
     });
-    await Router.push('/');
+    await Router.push('/blog');
   }
 
   const handleDelete = async (id: string): Promise<void> => {
     await fetch(`/api/post/${id}`, {
       method: 'DELETE',
     });
-    Router.push('/')
+    Router.push('/drafts')
   }
 
   return (

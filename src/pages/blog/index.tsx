@@ -2,31 +2,30 @@ import BlogCard from "components/BlogCard";
 import Head from "next/head";
 import { BlogPost, BlogPosts } from "types/types";
 import prisma from "lib/prisma";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await prisma.blogPost.findMany({
-    where: { status: true },
-    orderBy: { updatedAt: "desc" },
-    include: {
-      author: {
-        select: { name: true },
-      },
-      tags: {
-        select: { name: true }
-      }
+    where: {
+      status: true,
     },
-  });
+    include: {
+      author: { select: { name: true } },
+      tags: { select: { name: true } },
+    },
+    orderBy: {
+      updatedAt: "desc"
+    }
+  })
 
   const serializedPosts = JSON.parse(JSON.stringify(posts))
-  
+
   return {
     props: { posts: serializedPosts },
-    revalidate: 10
-  }
-}
+  };
+};
 
 const BlogPage = ({ posts }: BlogPosts) => {
 	const { data: session, status } = useSession();

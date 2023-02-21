@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Router from "next/router";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, ChangeEvent } from "react";
+import { supabase } from "lib/supabaseClient";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const session = await getSession(context);
@@ -21,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const CreatePost = () => {
+  const [image, setImage] = useState<any | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [featuredImage, setFeaturedImage] = useState('');
@@ -28,9 +30,21 @@ const CreatePost = () => {
   const [content, setContent] = useState('');
   const [tags, setTags] = useState([]);
 
+  const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      const i = e.target.files[0]
+      setImage(i);
+    }
+  }
+
   const submitData = async (e: SyntheticEvent) => {
     e.preventDefault()
     try {
+      // const { data, error } = await supabase.storage.getBucket("elysium-realm").from("blogImages").upload(`public/${image.name}`, image);
+      // console.log(`public/${image.name}`);
+      // console.log(data);
+      // console.log(error);
       const body = { title, slug, content };
       await fetch('/api/post', {
         method: 'POST',
@@ -62,15 +76,20 @@ const CreatePost = () => {
 
         <div className="flex flex-col m-5 space-y-5">
           <div className="flex flex-col">
+            <input type="file" id="featuredImage" name="featuredImage" onChange={handleImage}  />
+            <label htmlFor="title">Title</label>
             <input
               autoFocus
+              id="title"
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Title"
               type="text"
               value={title}
               className={"p-5 text-lg my-5 border-2 rounded-lg"}
             />
+            <label htmlFor="slug">Slug</label>
             <input
+              id="slug"
               disabled
               placeholder="Slug"
               type="text"
@@ -78,8 +97,10 @@ const CreatePost = () => {
               className={"p-5 bg-gray-200 w-1/3 border-2 rounded-lg"}
             />
           </div>
-      
+
+          <label htmlFor="content">Content</label>
           <textarea
+            id="content"
             cols={50}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Content"

@@ -1,44 +1,21 @@
 import prisma from "lib/prisma";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Router from "next/router";
 import { ParsedUrlQuery } from "querystring";
 import { BlogPost, PostDetailsProps } from "types/types";
 
-interface IParams extends ParsedUrlQuery {
-  slug: string;
-}
-
-export const getStaticPaths: GetStaticPaths<IParams> = async () => {
-  const posts = await prisma.blogPost.findMany({
-    where: { status: true }
-  });
-
-  const paths = posts.map((post) => {
-    return {
-      params: { slug: post.slug }
-    }
-  })
-
-  return {
-    paths,
-    fallback: true
-  }
-}
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { slug } = context.params as IParams
-
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.blogPost.findUnique({
     where: {
-      slug: slug,
+      slug: String(params?.slug)
     },
-    include: {
+    include: { 
       author: { select: { name: true, email: true } },
-      tags: { select: { name: true }}
-    }
-  })
+      tags: { select: { name: true } },
+    },
+  });
 
   if (!post) {
     return {
@@ -49,7 +26,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     }
   }
 
-  const serializedPost = JSON.parse(JSON.stringify(post))
+  const serializedPost = JSON.parse(JSON.stringify(post));
 
   return {
     props: {
@@ -72,7 +49,7 @@ const PostDetails = ({ post }: PostDetailsProps) => {
     await fetch(`/api/post/${id}`, {
       method: 'DELETE',
     });
-    Router.push('/')
+    Router.push('/blog')
   }
 
   return (
