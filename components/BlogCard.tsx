@@ -2,17 +2,28 @@ import Image from "next/image";
 import SkeletonBG from "public/skeleton-bg.png";
 import { BlogCardProps } from "types/types";
 import Link from "next/link";
+import { supabase } from "lib/supabaseClient";
+import { useEffect, useState } from "react";
 
 const BlogCard = ({ post, key, path }: BlogCardProps) => {
+  const [imageUrl, setImageUrl] = useState("");
   post.createdAt = new Date(post.createdAt);
   post.updatedAt = new Date(post.updatedAt);
+
+  useEffect(() => {
+    const getImageUrl = async () => {
+      const signedUrl = await supabase.storage.from(`elysium-realm`).createSignedUrl(post.featuredImage, 1);
+      setImageUrl(String(signedUrl));
+    }
+    getImageUrl();
+  }, [])
 
   return (
     <Link href={`/${path}/${post.slug}`}>
       <div className="flex m-2 border-y-2 border-gray-200 space-x-2 hover:bg-gray-200" key={key}>
         {
           post.featuredImage ? (
-            <Image alt="" src={post.featuredImage} width={200} height={200} />
+            <Image alt="" src={SkeletonBG} width={200} height={200} />
           ) : (
             <Image alt="" src={SkeletonBG} width={200} height={200} />
          )

@@ -1,7 +1,40 @@
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import prisma from "lib/prisma";
+import { BlogPost } from "types/types";
 
-const HomePage = () => {
+interface Props {
+  post: BlogPost;
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const post = await prisma.blogPost.findFirst({
+    where: {
+      status: true,
+    },
+    include: { 
+      author: { select: { name: true, email: true } },
+      tags: { select: { name: true } },
+    },
+    orderBy: {
+      updatedAt: "desc"
+    }
+  });
+
+  const serializedPost = JSON.parse(JSON.stringify(post));
+
+  return {
+    props: {
+      post: serializedPost
+    }
+  }
+}
+
+const HomePage = ({ post }: Props) => {
+  post.createdAt = new Date(post.createdAt);
+  post.updatedAt = new Date(post.updatedAt);
+
   return (
     <>
       <Head>
@@ -31,13 +64,13 @@ const HomePage = () => {
 
           <div className="bg-white text-black px-4 py-2 hover:bg-gray-200">
             <h4 className="font-bold text-blue-500">Latest Blog Post</h4>
-            <div>
-              <p className="font-bold">New blog post!</p>
-              <p>This new blog post will be used for testing...</p>
-              <p>By Author On Wed Feb 15 2023</p>
+            <Link href={`/blog/${post.slug}`}>
+              <p className="font-bold">{post.title}</p>
+              <p>{post.excerpt}</p>
+              <p>By {post.author.name} On {post.createdAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
               <p>Tag(s): Uncategorized</p>
-              <p>Latest Updated On Wed Feb 15 2023</p>
-            </div>
+              <p>Latest Updated On {post.updatedAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+            </Link>
           </div>
         </div>
       </div>

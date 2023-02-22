@@ -37,15 +37,14 @@ const CreatePost = () => {
       setImage(i);
     }
   }
+  
 
   const submitData = async (e: SyntheticEvent) => {
     e.preventDefault()
     try {
-      // const { data, error } = await supabase.storage.getBucket("elysium-realm").from("blogImages").upload(`public/${image.name}`, image);
-      // console.log(`public/${image.name}`);
-      // console.log(data);
-      // console.log(error);
-      const body = { title, slug, content };
+      const { data, error } = await supabase.storage.from("elysium-realm").upload(`blogImages/${image.name}`, image as File);
+      console.log(data);
+      const body = { title, slug, content, featuredImage: data?.path };
       await fetch('/api/post', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -76,7 +75,7 @@ const CreatePost = () => {
 
         <div className="flex flex-col m-5 space-y-5">
           <div className="flex flex-col">
-            <input type="file" id="featuredImage" name="featuredImage" onChange={handleImage}  />
+            <input type="file" id="featuredImage" name="featuredImage" onChange={handleImage} accept="image/*" />
             <label htmlFor="title">Title</label>
             <input
               autoFocus

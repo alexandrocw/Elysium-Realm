@@ -19,7 +19,7 @@ const createExcerpt = (value: string, maxLength: number): string => {
 }
 
 const handle = async (req: Request, res: Response) => {
-  const { title, slug, content } = req.body;
+  const { title, slug, content, featuredImage } = req.body;
 
   const excerpt = createExcerpt(content, 20);
 
@@ -30,6 +30,7 @@ const handle = async (req: Request, res: Response) => {
       slug: slug,
       excerpt: excerpt,
       content: content,
+      featuredImage: featuredImage,
       author: { connect: { email: session?.user?.email! } }
     },
   });
