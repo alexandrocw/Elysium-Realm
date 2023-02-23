@@ -33,14 +33,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const HomePage = ({ post }: Props) => {
-  if(!post) {
-    return (
-      <></>
-    )
-  } else {
-    post.createdAt = new Date(post.createdAt);
-    post.updatedAt = new Date(post.updatedAt);
-  }
 
   return (
     <>
@@ -74,9 +66,9 @@ const HomePage = ({ post }: Props) => {
             <Link href={`/blog/${post.slug}`}>
               <p className="font-bold">{post.title}</p>
               <p>{post.excerpt}</p>
-              <p>By {post.author.name} On {post.createdAt.toLocaleDateString()}</p>
+              <p>By {post.author.name} On </p>
               <p>Tag(s): Uncategorized</p>
-              <p>Last Updated On {post.updatedAt.toLocaleDateString()}</p>
+              <p>Last Updated On </p>
             </Link>
           </div>
         </div>

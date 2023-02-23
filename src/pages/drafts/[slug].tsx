@@ -44,10 +44,6 @@ const PostDetails = ({ post }: PostDetailsProps) => {
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === post.author.email;
   let title = post.title;
-  
-
-  post.createdAt = new Date(post.createdAt);
-  post.updatedAt = new Date(post.updatedAt);
 
   useEffect(() => {
     if(post.featuredImage) downloadImage(post.featuredImage);
@@ -109,7 +105,7 @@ const PostDetails = ({ post }: PostDetailsProps) => {
           }
         </div>
         <h2 className="text-center text-xl">By {post.author.name}</h2>
-        <p className="text-center">Latest Updated On {post.updatedAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+        <p className="text-center">Latest Updated On </p>
         <p className="text-center">Tag(s): {post.tags.map((tag) => (tag.name))}</p>
 
         <div className="mt-10">
