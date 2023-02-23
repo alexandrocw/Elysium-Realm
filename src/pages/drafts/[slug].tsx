@@ -4,6 +4,10 @@ import Head from "next/head";
 import { PostDetailsProps } from "types/types";
 import Router from "next/router";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { supabase } from "lib/supabaseClient";
+import SkeletonBG from "public/skeleton-bg.png";
+import Image from "next/image";
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const post = await prisma.blogPost.findUnique({
@@ -35,19 +39,32 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 }
 
 const PostDetails = ({ post }: PostDetailsProps) => {
+  const [imageUrl, setImageUrl] =  useState("");
   const { data: session, status } = useSession();
-  if (status === 'loading') {
-    return <div>Authenticating...</div>
-  }
   const userHasValidSession = Boolean(session);
   const postBelongsToUser = session?.user?.email === post.author.email;
   let title = post.title;
-  if (!post.status) {
-    title = `${title} (Draft)`
-  }
+  
 
   post.createdAt = new Date(post.createdAt);
   post.updatedAt = new Date(post.updatedAt);
+
+  useEffect(() => {
+    if(post.featuredImage) downloadImage(post.featuredImage);
+  }, [post.featuredImage])
+
+  const downloadImage = async (path: any) => {
+    try {
+      const { data, error } = await supabase.storage.from("elysium-realm").download(path);
+      if (error) {
+        throw error
+      }
+      const url = URL.createObjectURL(data);
+      setImageUrl(url)
+    } catch (error) {
+
+    }
+  }
 
   const handlePublish = async (id: string): Promise<void> => {
     await fetch(`/api/publish/${id}`, {
@@ -63,6 +80,14 @@ const PostDetails = ({ post }: PostDetailsProps) => {
     Router.push('/drafts')
   }
 
+  if (status === 'loading') {
+    return <div>Authenticating...</div>
+  }
+
+  if (!post.status) {
+    title = `${title} (Draft)`
+  }
+
   return (
     <>
       <Head>
@@ -74,6 +99,15 @@ const PostDetails = ({ post }: PostDetailsProps) => {
 
       <div className="flex flex-col m-10 bg-white justify-center p-5 rounded-md">
         <h1 className="text-center text-4xl">{title}</h1>
+        <div className="flex justify-center items-center">
+          {
+            imageUrl ? (
+              <Image alt="" src={imageUrl} width={600} height={800}  />
+            ) : (
+              <Image alt="" src={SkeletonBG} width={600} height={800} />
+          )
+          }
+        </div>
         <h2 className="text-center text-xl">By {post.author.name}</h2>
         <p className="text-center">Latest Updated On {post.updatedAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
         <p className="text-center">Tag(s): {post.tags.map((tag) => (tag.name))}</p>

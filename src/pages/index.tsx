@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import prisma from "lib/prisma";
 import { BlogPost } from "types/types";
+import { useEffect } from "react";
 
 interface Props {
   post: BlogPost;
@@ -32,8 +33,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const HomePage = ({ post }: Props) => {
-  post.createdAt = new Date(post.createdAt);
-  post.updatedAt = new Date(post.updatedAt);
+  if(!post) {
+    return (
+      <></>
+    )
+  } else {
+    post.createdAt = new Date(post.createdAt);
+    post.updatedAt = new Date(post.updatedAt);
+  }
 
   return (
     <>
@@ -67,9 +74,9 @@ const HomePage = ({ post }: Props) => {
             <Link href={`/blog/${post.slug}`}>
               <p className="font-bold">{post.title}</p>
               <p>{post.excerpt}</p>
-              <p>By {post.author.name} On {post.createdAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+              <p>By {post.author.name} On {post.createdAt.toLocaleDateString()}</p>
               <p>Tag(s): Uncategorized</p>
-              <p>Latest Updated On {post.updatedAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+              <p>Last Updated On {post.updatedAt.toLocaleDateString()}</p>
             </Link>
           </div>
         </div>

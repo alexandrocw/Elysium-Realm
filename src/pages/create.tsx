@@ -76,7 +76,7 @@ const CreatePost = () => {
         <div className="flex flex-col m-5 space-y-5">
           <div className="flex flex-col">
             <input type="file" id="featuredImage" name="featuredImage" onChange={handleImage} accept="image/*" />
-            <label htmlFor="title">Title</label>
+            <label htmlFor="title" className="hidden">Title</label>
             <input
               autoFocus
               id="title"
@@ -86,7 +86,7 @@ const CreatePost = () => {
               value={title}
               className={"p-5 text-lg my-5 border-2 rounded-lg"}
             />
-            <label htmlFor="slug">Slug</label>
+            <label htmlFor="slug" className="hidden">Slug</label>
             <input
               id="slug"
               disabled
@@ -97,7 +97,7 @@ const CreatePost = () => {
             />
           </div>
 
-          <label htmlFor="content">Content</label>
+          <label htmlFor="content" className="hidden">Content</label>
           <textarea
             id="content"
             cols={50}
