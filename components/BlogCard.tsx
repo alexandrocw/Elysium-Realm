@@ -7,14 +7,6 @@ import { useEffect, useState } from "react";
 
 const BlogCard = ({ post, key, path }: BlogCardProps) => {
   const [imageUrl, setImageUrl] = useState("");
-  if(!post) {
-    return (
-      <></>
-    )
-  } else {
-    post.createdAt = new Date(post.createdAt);
-    post.updatedAt = new Date(post.updatedAt);
-  }
 
   useEffect(() => {
     if(post.featuredImage) downloadImage(post.featuredImage);
@@ -46,9 +38,9 @@ const BlogCard = ({ post, key, path }: BlogCardProps) => {
         <div className="flex flex-col">
           <h3 className="font-bold">{post.title}</h3>
           <p>{post.excerpt}</p>
-          <p>By {post.author.name} On {post.createdAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+          <p>By {post.author.name} On </p>
           <p>Tag(s): {post.tags.map((tag) => (tag.name))}</p>
-          <p>Latest Updated On {post.updatedAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+          <p>Latest Updated On </p>
         </div>
       </div>
     </Link>
