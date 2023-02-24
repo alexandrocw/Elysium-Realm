@@ -29,11 +29,22 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     }
   }
 
-  const serializedDrafts = JSON.parse(JSON.stringify(post));
-
-  return {
-    props: {
-      post: serializedDrafts
+  if (post) {
+    const serializedDraft = JSON.parse(JSON.stringify(post));
+    return {
+      props: {
+        post: {
+          ...serializedDraft,
+          createdAt: new Date(post.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
+          updatedAt: new Date(post.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})  
+        }
+      }
+    }
+  } else {
+    return {
+      props: {
+        post: null
+      }
     }
   }
 }
@@ -105,7 +116,8 @@ const PostDetails = ({ post }: PostDetailsProps) => {
           }
         </div>
         <h2 className="text-center text-xl">By {post.author.name}</h2>
-        <p className="text-center">Latest Updated On </p>
+        <p className="text-center">Created On {post.createdAt.toString()}</p>
+        <p className="text-center">Latest Updated On {post.updatedAt.toString()}</p>
         <p className="text-center">Tag(s): {post.tags.map((tag) => (tag.name))}</p>
 
         <div className="mt-10">

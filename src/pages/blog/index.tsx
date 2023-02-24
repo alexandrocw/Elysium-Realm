@@ -20,11 +20,27 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   })
 
-  const serializedPosts = JSON.parse(JSON.stringify(posts))
-
-  return {
-    props: { posts: serializedPosts },
-  };
+  if (posts) {
+    const serializedPosts = JSON.parse(JSON.stringify(posts));
+    const modifiedPosts = serializedPosts.map((post: any) => {
+      return {
+        ...post,
+        createdAt: new Date(post.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
+        updatedAt: new Date(post.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})
+      }
+    })
+    return {
+      props: {
+        posts: modifiedPosts
+      }
+    }
+  } else {
+    return {
+      props: {
+        posts: null
+      }
+    }
+  }
 };
 
 const BlogPage = ({ posts }: BlogPosts) => {

@@ -23,11 +23,23 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   });
 
-  const serializedPost = JSON.parse(JSON.stringify(post));
+  if (post) {
+    const serializedPost = JSON.parse(JSON.stringify(post));
 
-  return {
-    props: {
-      post: serializedPost
+    return {
+      props: {
+        post: {
+          ...serializedPost,
+          createdAt: new Date(post.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
+          updatedAt: new Date(post.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})
+        }
+      }
+    }
+  } else {
+    return {
+      props: {
+        post: null
+      }
     }
   }
 }
@@ -66,9 +78,9 @@ const HomePage = ({ post }: Props) => {
             <Link href={`/blog/${post.slug}`}>
               <p className="font-bold">{post.title}</p>
               <p>{post.excerpt}</p>
-              <p>By {post.author.name} On </p>
+              <p>By {post.author.name} On {post.createdAt.toString()}</p>
               <p>Tag(s): Uncategorized</p>
-              <p>Last Updated On </p>
+              <p>Last Updated On {post.updatedAt.toString()}</p>
             </Link>
           </div>
         </div>

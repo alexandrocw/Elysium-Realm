@@ -23,11 +23,27 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
   })
 
-  const serializedDrafts = JSON.parse(JSON.stringify(drafts))
-
-  return {
-    props: { drafts: serializedDrafts },
-  };
+  if (drafts) {
+    const serializedDrafts = JSON.parse(JSON.stringify(drafts));
+    const modifiedDrafts = serializedDrafts.map((draft: any) => {
+      return {
+        ...draft,
+        createdAt: new Date(draft.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
+        updatedAt: new Date(draft.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})
+      }
+    })
+    return {
+      props: {
+        drafts: modifiedDrafts
+      }
+    }
+  } else {
+    return {
+      props: {
+        drafts: null
+      }
+    }
+  }
 };
 
 type Props = {

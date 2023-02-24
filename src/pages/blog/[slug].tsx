@@ -21,20 +21,23 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
   });
 
-  if (!post) {
+  if (post) {
+    const serializedPost = JSON.parse(JSON.stringify(post));
+    return {
+      props: {
+        post: {
+          ...serializedPost,
+          createdAt: new Date(post.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
+          updatedAt: new Date(post.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})  
+        }
+      }
+    }
+  } else {
     return {
       redirect: {
         destination: '/',
         permanent: false
       }
-    }
-  }
-
-  const serializedPost = JSON.parse(JSON.stringify(post));
-
-  return {
-    props: {
-      post: serializedPost
     }
   }
 }
@@ -85,16 +88,19 @@ const PostDetails = ({ post }: PostDetailsProps) => {
             </Head>
 
             <div className="flex flex-col m-10 bg-white justify-center p-5 rounded-md">
-              {
-                imageUrl ? (
-                  <Image alt="" src={imageUrl} width={600} height={800} />
-                ) : (
-                  <Image alt="" src={SkeletonBG} width={600} height={800} />
-              )
-              }
               <h1 className="text-center text-4xl">{post.title}</h1>
+              <div className="flex justify-center items-center">
+                {
+                  imageUrl ? (
+                    <Image alt="" src={imageUrl} width={600} height={800}  />
+                  ) : (
+                    <Image alt="" src={SkeletonBG} width={600} height={800} />
+                )
+                }
+              </div>
               <h2 className="text-center text-xl">By {post.author.name}</h2>
-              <p className="text-center">Latest Updated On </p>
+              <p className="text-center">Created On {post.createdAt.toString()}</p>
+              <p className="text-center">Latest Updated On {post.updatedAt.toString()}</p>
               <p className="text-center">Tag(s): {post.tags.map((tag) => (tag.name))}</p>
 
               <div className="mt-10">

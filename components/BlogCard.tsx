@@ -38,9 +38,9 @@ const BlogCard = ({ post, key, path }: BlogCardProps) => {
         <div className="flex flex-col">
           <h3 className="font-bold">{post.title}</h3>
           <p>{post.excerpt}</p>
-          <p>By {post.author.name} On </p>
+          <p>By {post.author.name} On {post.createdAt.toString()}</p>
           <p>Tag(s): {post.tags.map((tag) => (tag.name))}</p>
-          <p>Latest Updated On </p>
+          <p>Latest Updated On {post.updatedAt.toString()}</p>
         </div>
       </div>
     </Link>

@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { SyntheticEvent, ChangeEvent } from "react";
 import { supabase } from "lib/supabaseClient";
+import prisma from "lib/prisma";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 	const session = await getSession(context);
@@ -18,17 +19,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  return { props: {} };
+  const tags = await prisma.tags.findMany();
+
+  return {
+    props: {
+      tags
+    }
+  };
 }
 
-const CreatePost = () => {
+const CreatePost = ({ tags }: any) => {
   const [image, setImage] = useState<any | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [featuredImage, setFeaturedImage] = useState('');
   const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
-  const [tags, setTags] = useState([]);
+  const [inputTags, setInputTags] = useState([]);
 
   const handleImage = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -96,6 +103,13 @@ const CreatePost = () => {
               className={"p-5 bg-gray-200 w-1/3 border-2 rounded-lg"}
             />
           </div>
+
+          <label htmlFor="tags" className="hidden">Tags</label>
+          <select 
+            id="tags"
+            name="tags"
+          >
+          </select>
 
           <label htmlFor="content" className="hidden">Content</label>
           <textarea
