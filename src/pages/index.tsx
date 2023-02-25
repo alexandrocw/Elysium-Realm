@@ -2,11 +2,12 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import prisma from "lib/prisma";
-import { BlogPost } from "types/types";
+import { BlogPost, ProjectPost } from "types/types";
 import { useEffect } from "react";
 
 interface Props {
   post: BlogPost;
+  project: ProjectPost;
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -23,8 +24,19 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   });
 
-  if (post) {
+  const project = await prisma.projectPost.findFirst({
+    include: {
+      techs: { select: { name: true } },
+      tags: { select: { name: true } },
+    },
+    orderBy: {
+      updatedAt: "desc"
+    }
+  })
+
+  if (post && project) {
     const serializedPost = JSON.parse(JSON.stringify(post));
+    const serializedProject = JSON.parse(JSON.stringify(project));
 
     return {
       props: {
@@ -32,19 +44,25 @@ export const getServerSideProps: GetServerSideProps = async () => {
           ...serializedPost,
           createdAt: new Date(post.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
           updatedAt: new Date(post.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})
-        }
+        },
+        project: {
+          ...serializedProject,
+          createdAt: new Date(project.createdAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'}),
+          updatedAt: new Date(project.updatedAt).toLocaleString('en-US', { weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})
+        },
       }
     }
   } else {
     return {
       props: {
-        post: null
+        post: null,
+        project: null
       }
     }
   }
 }
 
-const HomePage = ({ post }: Props) => {
+const HomePage = ({ post, project }: Props) => {
 
   return (
     <>
@@ -64,13 +82,14 @@ const HomePage = ({ post }: Props) => {
           <h3 className="text-center m-2 font-bold">What&apos;s going on?</h3>
           <div className="bg-white text-black px-4 py-2 mb-2 w-full hover:bg-gray-200">
             <h4 className="font-bold text-blue-500">Latest Project</h4>
-            <div>
-              <p className="font-bold">New site Elysium Realm!</p>
-              <p>This site is still on progress, because learning never stop...</p>
-              <p>By Alexandro C.W. On Wed Feb 15 2023</p>
-              <p>Tag(s): Full Stack Project</p>
-              <p>Latest Updated On Wednesday 15 Februari 2023</p>
-            </div>
+            <Link href={`/project/${project.slug}`}>
+              <p className="font-bold">{project.title}</p>
+              <p>{project.excerpt}</p>
+              <p>By Admin On {project.createdAt.toString()}</p>
+              <p>Tag(s): Uncategorized</p>
+              <p>Tech Stacks: {project.techs.map((tech) => (tech.name))}</p>
+              <p>Last Updated On {project.updatedAt.toString()}</p>
+            </Link>
           </div>
 
           <div className="bg-white text-black px-4 py-2 hover:bg-gray-200">
