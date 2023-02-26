@@ -62,7 +62,7 @@ const ProjectsPage = ({ projects }: ProjectPosts) => {
           : (
           <div className="flex flex-col space-y-2">
             <Link className="bg-white p-5 rounded-lg hover:bg-gray-200 text-center text-3xl" href="/create/project">
-              Create a new post
+              Create a new project
             </Link>
           </div>    
           )

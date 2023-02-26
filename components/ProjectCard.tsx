@@ -1,11 +1,29 @@
+import { supabase } from "lib/supabaseClient";
 import Image from "next/image";
 import Link from "next/link";
 import SkeletonBG from "public/skeleton-bg.png";
+import { useEffect, useState } from "react";
 import { ProjectCardProps } from "types/types";
 
-const ProjectCard = ({ project, key}: ProjectCardProps) => {
-  project.createdAt = new Date(project.createdAt);
-  project.updatedAt = new Date(project.updatedAt);
+const ProjectCard = ({ project, key }: ProjectCardProps) => {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    if(project.featuredImage) downloadImage(project.featuredImage);
+  }, [project.featuredImage])
+
+  const downloadImage = async (path: any) => {
+    try {
+      const { data, error } = await supabase.storage.from("elysium-realm").download(path);
+      if (error) {
+        throw error
+      }
+      const url = URL.createObjectURL(data);
+      setImageUrl(url)
+    } catch (error) {
+
+    }
+  }
 
   return (
     <Link href={`/projects/${project.slug}`}>
@@ -20,10 +38,10 @@ const ProjectCard = ({ project, key}: ProjectCardProps) => {
         <div className="flex flex-col">
           <h3 className="font-bold">{project.title}</h3>
           <p>{project.excerpt}</p>
-          <p>By Admin On {project.createdAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+          <p>By Admin On {project.createdAt.toString()}</p>
           <p>Tag(s): {project.tags.map((tag) => (tag.name))}</p>
           <p>Tech Stack(s): {project.techs.map((tech) => (tech.name))}</p>
-          <p>Latest Updated On {project.updatedAt.toLocaleDateString('en-US', {weekday: 'short', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'})}</p>
+          <p>Latest Updated On {project.updatedAt.toString()}</p>
         </div>
       </div>
     </Link>
