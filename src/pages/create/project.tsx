@@ -32,9 +32,7 @@ const CreatePost = ({ tags }: any) => {
   const [image, setImage] = useState<any | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
-  const [featuredImage, setFeaturedImage] = useState('');
   const [links, setLinks] = useState('');
-  const [excerpt, setExcerpt] = useState('');
   const [content, setContent] = useState('');
   const [inputTags, setInputTags] = useState([]);
 
@@ -50,10 +48,14 @@ const CreatePost = ({ tags }: any) => {
   const submitData = async (e: SyntheticEvent) => {
     e.preventDefault()
     try {
-      const { data, error } = await supabase.storage.from("elysium-realm").upload(`blogImages/${image.name}`, image as File);
-      console.log(data);
-      const body = { title, slug, content, featuredImage: data?.path };
-      await fetch('/api/post', {
+      let body;
+      if (image) {
+        const { data, error } = await supabase.storage.from("elysium-realm").upload(`blogImages/${image.name}`, image as File);
+        body = { title, slug, content, featuredImage: data?.path };
+      } else {
+        body = { title, slug, content, featuredImage: null };
+      }
+      await fetch('/api/create/project', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

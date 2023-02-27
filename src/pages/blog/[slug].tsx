@@ -66,7 +66,7 @@ const PostDetails = ({ post }: PostDetailsProps) => {
   }
 
   const handleDelete = async (id: string): Promise<void> => {
-    await fetch(`/api/post/${id}`, {
+    await fetch(`/api/create/blog/${id}`, {
       method: 'DELETE',
     });
     Router.push('/blog')

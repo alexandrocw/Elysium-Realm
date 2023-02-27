@@ -2,7 +2,7 @@ import { getSession } from "next-auth/react";
 import prisma from "lib/prisma";
 import { Request, Response } from "express";
 
-// POST /api/post
+// POST /api/create/blog
 // Required fields in body: title, slug, excerpt, content
 
 const createExcerpt = (value: string, maxLength: number): string => {
@@ -21,17 +21,16 @@ const createExcerpt = (value: string, maxLength: number): string => {
 const handle = async (req: Request, res: Response) => {
   const { title, slug, content, featuredImage } = req.body;
 
-  const excerpt = createExcerpt(content, 20);
+  const excerpt = createExcerpt(content, 50);
 
   const session = await getSession({ req });
-  const result = await prisma.blogPost.create({
+  const result = await prisma.projectPost.create({
     data: {
       title: title,
       slug: slug,
       excerpt: excerpt,
       content: content,
       featuredImage: featuredImage,
-      author: { connect: { email: session?.user?.email! } }
     },
   });
   res.json(result);
