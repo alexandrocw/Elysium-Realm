@@ -9,6 +9,7 @@ interface BlogPost {
   author: {
     name: string;
     email: string;
+    id: string;
   };
   authorId: string;
   featuredImage: string;

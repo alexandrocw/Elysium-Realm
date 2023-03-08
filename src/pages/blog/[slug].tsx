@@ -72,6 +72,10 @@ const PostDetails = ({ post }: PostDetailsProps) => {
     Router.push('/blog')
   }
 
+  const handleUpdate = (slug: string) => {
+    Router.push(`/update/blog/${slug}`);
+  }
+
   return (
     <>
       {
@@ -106,7 +110,10 @@ const PostDetails = ({ post }: PostDetailsProps) => {
               <div className="mt-10">
                 <p>{post.content}</p>
                 {userHasValidSession && postBelongsToUser && (
-                  <button type="button" onClick={() => handleDelete(post.id)} className="bg-red-400 p-5 rounded-lg hover:bg-red-500 mt-10">Delete</button>
+                  <>
+                    <button type="button" onClick={() => handleUpdate(post.slug)} className="bg-blue-400 p-5 rounded-lg hover:bg-blue-500 mt-10">Update</button>
+                    <button type="button" onClick={() => handleDelete(post.id)} className="bg-red-400 p-5 rounded-lg hover:bg-red-500 mt-10">Delete</button>
+                  </>
                 )}
               </div>
             </div>
