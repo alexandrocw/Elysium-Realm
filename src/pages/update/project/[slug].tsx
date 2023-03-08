@@ -7,3 +7,5 @@ const UpdateProject: NextPage = () => {
     </>
   )
 }
+
+export default UpdateProject

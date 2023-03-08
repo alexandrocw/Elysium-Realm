@@ -163,4 +163,4 @@ const UpdateBlog: NextPage<Props> = ({ post }: Props ) => {
   )
 }
 
-export default UpdateBlog
+export default UpdateBlog;
