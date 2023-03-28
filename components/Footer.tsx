@@ -22,6 +22,12 @@ const Footer = () => {
 				</div>
 			</div>
 
+			<div className="flex justify-evenly my-5 text-center">
+				<Link href="/privacy" className="hover:text-purple-500">Privacy &amp; Policy</Link>
+				<Link href="/terms" className="hover:text-purple-500">Terms of Use</Link>
+				<Link href="/contact" className="hover:text-purple-500">Contact</Link>
+			</div>
+
 			<div className="text-center">
 				<p>&copy; Copyright 2023 Elysium Realm</p>
 			</div>
